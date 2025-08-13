@@ -19,5 +19,5 @@ export const generateApiKey = (): string => {
 };
 
 export const generateReferralLink = (username: string): string => {
-  return `${process.env.FRONTEND_URL}/sign-up?ref=${username}`;
+  return `${process.env.FRONTEND_ORIGIN}/sign-up?ref=${username}`;
 };
