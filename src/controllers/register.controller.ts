@@ -1,11 +1,6 @@
 import { Request, Response } from "express";
-import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
 import prisma from "../config/prisma-client";
-import { generateApiKey, generateReferralLink } from "../utils/helpers";
 import { Provider } from "@prisma/client";
-
-const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 
 export const signup = async (
   req: Request,
@@ -13,6 +8,16 @@ export const signup = async (
 ): Promise<Response | void> => {
   try {
     const { email, phone, username, password, authProvider } = req.body;
+
+    console.log(
+      "➡️ Signup request received:",
+      req.body,
+      email,
+      phone,
+      username,
+      password,
+      authProvider
+    );
 
     if (![Provider.EMAIL, Provider.PHONE].includes(authProvider)) {
       return res.status(400).json({ message: "Invalid auth provider" });
@@ -44,6 +49,7 @@ export const signup = async (
     });
 
     if (existing) {
+      console.log("⚠️ Existing user found:", existing);
       if (
         (email && existing.email === email) ||
         (phone && existing.phone === phone)
@@ -57,35 +63,27 @@ export const signup = async (
       }
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const apiKey = generateApiKey();
-    const referralLink = generateReferralLink(username);
-
-    const user = await prisma.user.create({
-      data: {
+    res.cookie(
+      "pending_signup",
+      {
         authProvider,
-        email,
-        phone,
+        email: email || null,
+        phone: phone || null,
         username,
-        password: hashedPassword,
-        referralLink,
-        referralPoints: 0,
-        apiKey,
+        password,
       },
-    });
+      {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "lax",
+        maxAge: 15 * 60 * 1000,
+      }
+    );
 
-    const token = jwt.sign({ id: user.id }, JWT_SECRET, { expiresIn: "10d" });
-
-    res.status(201).json({
-      token,
-      message: "User created",
-      user: {
-        id: user.id,
-        email: user.email,
-        phone: user.phone,
-        username: user.username,
-        authProvider: user.authProvider,
-      },
+    console.log("✅ Signup data validated. Ready to send OTP.");
+    return res.status(200).json({
+      success: true,
+      message: "Signup data validated. Ready to send OTP.",
     });
   } catch (err) {
     console.error("Signup error:", err);
