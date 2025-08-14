@@ -23,18 +23,26 @@ export const sendOTP = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "No pending signup found" });
     }
 
+    const cleanPhone = (num: string | null | undefined) => {
+      return num ? num.replace(/[^\d]/g, "") : num;
+    };
+
     const { authProvider, email, phone, username, password } = pendingSignup;
+    
+    const cleanedCookiePhone = cleanPhone(phone);
+    const cleanedContact = cleanPhone(contact);
+
     console.log("➡️ Pending signup data:", {
       authProvider,
       email,
-      phone,
+      cleanedCookiePhone,
       username,
       password,
     });
 
     if (
       (authProvider === "EMAIL" && email !== contact) ||
-      (authProvider === "PHONE" && phone !== contact)
+      (authProvider === "PHONE" && cleanedCookiePhone !== cleanedContact)
     ) {
       return res
         .status(400)
@@ -48,8 +56,8 @@ export const sendOTP = async (req: Request, res: Response) => {
       console.log(`📧 Sending OTP to email: ${email}`);
       await sendOtpEmail(email!, otp);
     } else if (authProvider === "PHONE") {
-      console.log(`📱 Sending OTP via SMS to phone: ${phone}`);
-      await sendOtpSMS(phone!, otp);
+      console.log(`📱 Sending OTP via SMS to phone: ${cleanedCookiePhone}`);
+      await sendOtpSMS(cleanedCookiePhone!, otp);
     }
 
     res.cookie(
@@ -57,7 +65,7 @@ export const sendOTP = async (req: Request, res: Response) => {
       {
         authProvider,
         email: email || null,
-        phone: phone || null,
+        phone: cleanedCookiePhone || null,
         username,
         password,
         otp: hashedOtp,
