@@ -66,11 +66,7 @@ export const verifyOTP = async (req: Request, res: Response) => {
       sameSite: "lax",
     });
 
-    res.clearCookie("signup_contact", {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "lax",
-    });
+    res.clearCookie("signup_contact", { path: "/" });
 
     const token = jwt.sign(
       { id: newUser.id, username: newUser.username },
