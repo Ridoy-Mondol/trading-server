@@ -1,8 +1,8 @@
 import crypto from 'crypto';
 import prisma from '../config/prisma-client';
 
-export const generateUsername = async (email: string): Promise<string> => {
-  const baseUsername = email.split('@')[0].toLowerCase();
+export const generateUsername = async (input: string): Promise<string> => {
+  const baseUsername = input.includes('@') ? input.split('@')[0].toLowerCase() : input.toLowerCase();
   let username = baseUsername;
   let suffix = 1;
 
