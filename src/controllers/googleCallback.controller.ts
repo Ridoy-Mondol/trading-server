@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { OAuth2Client } from "google-auth-library";
+import { UAParser } from "ua-parser-js";
 import prisma from "../config/prisma-client";
 import jwt from "jsonwebtoken";
 import {
@@ -7,6 +8,8 @@ import {
   generateApiKey,
   generateReferralLink,
 } from "../utils/helpers";
+import { getClientIP } from "../utils/ip";
+import { getLocationFromIP } from "../utils/location";
 
 const oauthClient = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
@@ -86,6 +89,38 @@ export const googleCallback = async (req: Request, res: Response) => {
       process.env.JWT_SECRET as string,
       { expiresIn: "15d" }
     );
+
+    const decoded = jwt.decode(token) as { exp?: number };
+    const expiresAt = decoded?.exp ? new Date(decoded.exp * 1000) : null;
+
+    const userAgent = req.headers["user-agent"] || "Unknown Device";
+    const ipAddress = await getClientIP(req);
+    const parser = new UAParser(userAgent);
+    const osData = parser.getOS();
+    const browserData = parser.getBrowser();
+    const locationData = await getLocationFromIP(ipAddress);
+
+    const opSystem = osData.name
+      ? `${osData.name} ${osData.version || ""}`.trim()
+      : "Unknown OS";
+    const browser = browserData.name
+      ? `${browserData.name} ${browserData.version || ""}`.trim()
+      : "Unknown Browser";
+    const location = locationData
+      ? `${locationData.region}, ${locationData.country}`
+      : null;
+
+    await prisma.session.create({
+      data: {
+        userId: user.id,
+        token,
+        expiresAt: expiresAt,
+        opSystem,
+        browser,
+        ipAddress,
+        location,
+      },
+    });
 
     res.cookie("auth_token", token, {
       httpOnly: true,
