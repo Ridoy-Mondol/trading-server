@@ -1,8 +1,11 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
+import { UAParser } from "ua-parser-js";
 import jwt from "jsonwebtoken";
 import prisma from "../config/prisma-client";
 import { Provider } from "@prisma/client";
+import { getClientIP } from "../utils/ip";
+import { getLocationFromIP } from "../utils/location";
 
 export const login = async (
   req: Request,
@@ -69,6 +72,38 @@ export const login = async (
       process.env.JWT_SECRET as string,
       { expiresIn: "15d" }
     );
+
+    const decoded = jwt.decode(token) as { exp?: number };
+    const expiresAt = decoded?.exp ? new Date(decoded.exp * 1000) : null;
+
+    const userAgent = req.headers["user-agent"] || "Unknown Device";
+    const ipAddress = await getClientIP(req);
+    const parser = new UAParser(userAgent);
+    const osData = parser.getOS();
+    const browserData = parser.getBrowser();
+    const locationData = await getLocationFromIP(ipAddress);
+
+    const opSystem = osData.name
+      ? `${osData.name} ${osData.version || ""}`.trim()
+      : "Unknown OS";
+    const browser = browserData.name
+      ? `${browserData.name} ${browserData.version || ""}`.trim()
+      : "Unknown Browser";
+    const location = locationData
+      ? `${locationData.region}, ${locationData.country}`
+      : null;
+
+    await prisma.session.create({
+      data: {
+        userId: user.id,
+        token,
+        expiresAt: expiresAt,
+        opSystem,
+        browser,
+        ipAddress,
+        location,
+      },
+    });
 
     res.cookie("auth_token", token, {
       httpOnly: true,

@@ -1,16 +1,33 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
+import prisma from "../config/prisma-client";
 
-export const verifyAuth = (req: Request, res: Response) => {
+export const verifyAuth = async (req: Request, res: Response) => {
   try {
-    console.log("authentication api calls");
+    console.log(`[Auth] verifyAuth endpoint hit`);
 
     const token = req.cookies.auth_token;
+
     if (token) {
-      const user = jwt.verify(token, process.env.JWT_SECRET as string);
+      let decoded: any;
+      try {
+        decoded = jwt.verify(token, process.env.JWT_SECRET as string);
+      } catch {
+        return res.status(401).json({ status: "unauthorized" });
+      }
+
+      const session = await prisma.session.findUnique({
+        where: { token },
+        select: { isActive: true, userId: true },
+      });
+
+      if (!session || !session.isActive) {
+        return res.status(401).json({ status: "unauthorized" });
+      }
+
       return res.status(200).json({
         status: "authenticated",
-        user,
+        user: decoded,
       });
     }
 
