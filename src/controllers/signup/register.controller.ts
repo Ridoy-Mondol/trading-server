@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import prisma from "../config/prisma-client";
+import prisma from "../../config/prisma-client";
 import { Provider } from "@prisma/client";
 
 export const signup = async (

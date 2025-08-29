@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-import { sendOtpEmail } from "../utils/sendOtpEmail";
-import { sendOtpSMS } from "../utils/sendOtpSMS";
+import { sendOtpEmail } from "../../utils/sendOtpEmail";
+import { sendOtpSMS } from "../../utils/sendOtpSMS";
 
 const generateOTP = (): string => {
   return Math.floor(1000 + Math.random() * 9000).toString();

@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { getSessions } from '../controllers/sessions.controller';
+import { getSessions } from '../controllers/sessions/sessions.controller';
 
 const router = Router();
 

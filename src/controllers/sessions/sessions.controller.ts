@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import prisma from "../config/prisma-client";
+import prisma from "../../config/prisma-client";
 
 export const getSessions = async (req: Request, res: Response) => {
   try {

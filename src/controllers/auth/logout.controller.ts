@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import prisma from "../config/prisma-client";
+import prisma from "../../config/prisma-client";
 
 export const logout = async (
   req: Request,

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
-import prisma from "../config/prisma-client";
+import prisma from "../../config/prisma-client";
 
 export const verifyAuth = async (req: Request, res: Response) => {
   try {

@@ -1,15 +1,15 @@
 import { Request, Response } from "express";
 import { OAuth2Client } from "google-auth-library";
 import { UAParser } from "ua-parser-js";
-import prisma from "../config/prisma-client";
+import prisma from "../../config/prisma-client";
 import jwt from "jsonwebtoken";
 import {
   generateUsername,
   generateApiKey,
   generateReferralLink,
-} from "../utils/helpers";
-import { getClientIP } from "../utils/ip";
-import { getLocationFromIP } from "../utils/location";
+} from "../../utils/helpers";
+import { getClientIP } from "../../utils/ip";
+import { getLocationFromIP } from "../../utils/location";
 
 const oauthClient = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,

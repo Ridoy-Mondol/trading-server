@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { UAParser } from "ua-parser-js";
 import jwt from "jsonwebtoken";
-import prisma from "../config/prisma-client";
+import prisma from "../../config/prisma-client";
 import { Provider } from "@prisma/client";
-import { getClientIP } from "../utils/ip";
-import { getLocationFromIP } from "../utils/location";
+import { getClientIP } from "../../utils/ip";
+import { getLocationFromIP } from "../../utils/location";
 
 export const login = async (
   req: Request,

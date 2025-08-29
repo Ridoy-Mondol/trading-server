@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { UAParser } from "ua-parser-js";
-import prisma from "../config/prisma-client";
-import { generateApiKey, generateReferralLink } from "../utils/helpers";
-import { getClientIP } from "../utils/ip";
-import { getLocationFromIP } from "../utils/location";
+import prisma from "../../config/prisma-client";
+import { generateApiKey, generateReferralLink } from "../../utils/helpers";
+import { getClientIP } from "../../utils/ip";
+import { getLocationFromIP } from "../../utils/location";
 
 export const verifyOTP = async (req: Request, res: Response) => {
   try {
