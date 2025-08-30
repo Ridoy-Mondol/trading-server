@@ -28,6 +28,8 @@
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^7.0.5",
     "prisma": "^6.13.0",
+    "qrcode": "^1.5.4",
+    "speakeasy": "^2.0.0",
     "supabase": "^2.33.9",
     "twilio": "^5.8.0",
     "ua-parser-js": "^2.0.4"
@@ -40,6 +42,8 @@
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^24.2.0",
     "@types/nodemailer": "^6.4.17",
+    "@types/qrcode": "^1.5.5",
+    "@types/speakeasy": "^2.0.10",
     "nodemon": "^3.1.10",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
