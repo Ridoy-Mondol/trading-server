@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import prisma from "../../config/prisma-client";
 
-export const verify2FA = async (req: Request, res: Response) => {
+export const disable2FA = async (req: Request, res: Response) => {
   try {
     const { code, password } = req.body;
     console.log("Received request body", req.body);
@@ -13,7 +13,7 @@ export const verify2FA = async (req: Request, res: Response) => {
       console.log("Missing code or password");
       return res
         .status(400)
-        .json({ message: "2FA code and password are required" });
+        .json({ message: "2FA token and password are required" });
     }
 
     const tokenCookie = req.cookies.auth_token;
@@ -33,6 +33,7 @@ export const verify2FA = async (req: Request, res: Response) => {
       id: string;
       username: string;
     };
+
     if (!decoded?.id) {
       console.log("Invalid JWT payload");
       return res.status(401).json({ message: "Invalid token" });
@@ -54,7 +55,6 @@ export const verify2FA = async (req: Request, res: Response) => {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     console.log("Password valid?", isPasswordValid);
-    
     if (!isPasswordValid) {
       console.log("Invalid password");
       return res.status(400).json({ message: "Invalid credentials" });
@@ -80,13 +80,13 @@ export const verify2FA = async (req: Request, res: Response) => {
 
     await prisma.user.update({
       where: { id: userId },
-      data: { is2FAEnabled: true },
+      data: { is2FAEnabled: false },
     });
-    console.log("2FA enabled successfully");
+    console.log("2FA disabled successfully");
 
-    return res.json({ message: "2FA enabled successfully" });
+    return res.json({ message: "2FA disabled successfully" });
   } catch (error) {
-    console.error("2FA verification error:", error);
-    return res.status(500).json({ message: "Error verifying 2FA" });
+    console.error("2FA disable error:", error);
+    return res.status(500).json({ message: "Error disabling 2FA" });
   }
 };
