@@ -33,6 +33,14 @@ export const setup2FA = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
+    if (user.authProvider === "GOOGLE" || user.authProvider === "XPR") {
+      const providerName = user.authProvider === "GOOGLE" ? "Google" : "XPR Network";
+      return res.json({
+        message:
+          `Your account is already protected by ${providerName}. No additional security setup is needed.`,
+      });
+    }
+
     if (user.is2FAEnabled) {
       return res.json({ message: "2FA is already enabled" });
     }
