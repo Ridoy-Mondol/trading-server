@@ -50,14 +50,14 @@ export const sendOTP = async (req: Request, res: Response) => {
     }
 
     const otp = generateOTP();
-    const hashedOtp = bcrypt.hashSync(otp, 10);
+    const hashedOtp = bcrypt.hash(otp, 10);
 
     if (authProvider === "EMAIL") {
       console.log(`📧 Sending OTP to email: ${email}`);
-      await sendOtpEmail(email!, otp);
+      await sendOtpEmail(email!, otp, "signup");
     } else if (authProvider === "PHONE") {
       console.log(`📱 Sending OTP via SMS to phone: ${cleanedCookiePhone}`);
-      await sendOtpSMS(cleanedCookiePhone!, otp);
+      await sendOtpSMS(cleanedCookiePhone!, otp, "signup");
     }
 
     res.cookie(

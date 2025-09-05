@@ -1,6 +1,12 @@
 import nodemailer from "nodemailer";
 
-export const sendOtpEmail = async (email: string, otp: string) => {
+type OtpPurpose = "signup" | "forgot_password";
+
+export const sendOtpEmail = async (
+  email: string,
+  otp: string,
+  purpose: OtpPurpose
+) => {
   try {
     console.log("➡️ Preparing to send OTP email to:", email);
 
@@ -28,17 +34,23 @@ export const sendOtpEmail = async (email: string, otp: string) => {
     });
 
     console.log("➡️ Transporter created, preparing mail options...");
+    const subject =
+      purpose === "signup"
+        ? "Unlock Your XPRTrade Account - Verification Code"
+        : "Unlock Your XPRTrade Account - Password Reset Code";
     const mailOptions = {
       from: `"XPRTrade" <${process.env.SMTP_USER}>`,
       to: email,
-      subject: "Unlock Your XPRTrade Account - Verification Code",
+      subject,
       html: `
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background: #f9f9fb; padding: 20px; color: #333; text-align: center; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); display: block; min-height: 0;">
           <h1 style="color: #2a5298; font-size: 32px; margin: 10px 0; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">
             XPRTrade Verification
           </h1>
           <p style="font-size: 18px; color: #666; margin: 15px 0; line-height: 1.6;">
-            Your exclusive <strong>verification code</strong> is here to unlock your account!
+            Your exclusive <strong>verification code</strong> is here to ${
+              purpose === "signup" ? "unlock your account!" : "reset your password!"
+            }
           </p>
           <div style="background: #ffffff; padding: 15px; border-radius: 10px; display: block; margin: 15px 0; border: 2px solid #e0e7ff; box-shadow: 0 2px 8px rgba(42, 82, 152, 0.1);">
             <span style="font-size: 40px; font-weight: bold; color: #2a5298; text-shadow: 0 1px 3px rgba(42, 82, 152, 0.2); user-select: text;">${otp}</span>

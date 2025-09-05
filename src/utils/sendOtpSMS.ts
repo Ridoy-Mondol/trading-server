@@ -16,18 +16,29 @@ console.log("📡 Initializing Twilio client...");
 const client = Twilio(accountSid, authToken);
 console.log("✅ Twilio client initialized");
 
-export const sendOtpSMS = async (phone: string, otp: string) => {
+type OtpPurpose = "signup" | "forgot_password";
+
+export const sendOtpSMS = async (
+  phone: string,
+  otp: string,
+  purpose: OtpPurpose
+) => {
   console.log("🚀 sendOtpSMS called");
   console.log("📞 Phone:", phone);
   console.log("🔢 OTP:", otp);
+
   try {
     if (!phone) {
       throw new Error("Phone number not provided");
     }
 
     console.log("✉️ Sending OTP SMS...");
+    const messageBody =
+      purpose === "signup"
+        ? `Welcome to XPRTrade! Your verification code is: ${otp}`
+        : `Reset your XPRTrade password using this code: ${otp}`;
     await client.messages.create({
-      body: `Your XPRTrade verification code is: ${otp}`,
+      body: messageBody,
       from: twilioPhoneNumber,
       to: phone,
     });
