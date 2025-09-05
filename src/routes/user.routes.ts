@@ -1,12 +1,8 @@
 import { Router } from 'express';
-import { signup } from '../controllers/signup/register.controller';
-import { sendOTP } from '../controllers/signup/send-otp.controller';
-import { verifyOTP } from '../controllers/signup/verify-otp.controller';
+import { getUser } from '../controllers/user/user.controller';
 
 const router = Router();
 
-router.post('/signup', signup);
-router.post('/signup/send-otp', sendOTP);
-router.post('/signup/verify-otp', verifyOTP);
+router.get('/me', getUser);
 
 export default router;

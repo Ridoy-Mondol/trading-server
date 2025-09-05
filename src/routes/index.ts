@@ -1,5 +1,6 @@
 import { Router } from "express";
 import userRoutes from "./user.routes";
+import signupRoutes from "./signup.routes";
 import authRoutes from "./auth.routes";
 import googleRoutes from "./google.route";
 import xprRoutes from "./xpr.routes";
@@ -8,7 +9,8 @@ import twoFARoutes from "./twoFA.routes";
 
 const router = Router();
 
-router.use("/", userRoutes);
+router.use("/user", userRoutes);
+router.use("/signup", signupRoutes);
 router.use("/auth", authRoutes);
 router.use("/auth/google", googleRoutes);
 router.use("/xpr", xprRoutes);
