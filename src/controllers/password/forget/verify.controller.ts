@@ -16,7 +16,7 @@ export const verifyForgotPasswordOTP = async (req: Request, res: Response) => {
     if (!pendingReset) {
       return res
         .status(400)
-        .json({ message: "No pending password reset found" });
+        .json({ message: "No pending password reset found or expired" });
     }
 
     const { authProvider, email, phone, userId, otp: hashedOtp } = pendingReset;
@@ -33,6 +33,7 @@ export const verifyForgotPasswordOTP = async (req: Request, res: Response) => {
         email: email || null,
         phone: phone || null,
         userId,
+        isOtpVerified: true,
       },
       {
         httpOnly: true,

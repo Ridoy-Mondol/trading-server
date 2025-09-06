@@ -38,6 +38,16 @@ export const signup = async (
       return res.status(400).json({ message: "Username is required" });
     }
 
+    const isStrongPassword = (pass: string) =>
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(pass);
+
+    if (!isStrongPassword(password)) {
+      return res.status(400).json({
+        message:
+          "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character",
+      });
+    }
+
     const existing = await prisma.user.findFirst({
       where: {
         OR: [

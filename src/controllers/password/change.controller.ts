@@ -19,6 +19,16 @@ export const changePassword = async (req: Request, res: Response) => {
       });
     }
 
+    const isStrongPassword = (pass: string) =>
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/.test(pass);
+
+    if (!isStrongPassword(newPassword)) {
+      return res.status(400).json({
+        message:
+          "Password must be at least 8 characters long and include uppercase, lowercase, number, and special character",
+      });
+    }
+
     const tokenCookie = req.cookies.auth_token;
     if (!tokenCookie) {
       return res
