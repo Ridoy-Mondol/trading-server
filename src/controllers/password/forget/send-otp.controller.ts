@@ -52,7 +52,7 @@ export const forgotPasswordOTP = async (req: Request, res: Response) => {
     }
 
     const otp = generateOTP();
-    const hashedOtp = bcrypt.hash(otp, 10);
+    const hashedOtp = await bcrypt.hash(otp, 10);
 
     if (authProvider === "EMAIL" && user.email) {
       console.log(`📧 Sending OTP to email: ${user.email}`);
