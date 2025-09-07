@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import prisma from "../../config/prisma-client";
 import { Provider } from "@prisma/client";
-import { createSession } from "../sessions/newSession.controller";
+import { createSession } from "../../services/session.service";
 
 export const login = async (
   req: Request,

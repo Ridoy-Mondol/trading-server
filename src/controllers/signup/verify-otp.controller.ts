@@ -3,7 +3,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import prisma from "../../config/prisma-client";
 import { generateApiKey, generateReferralLink } from "../../utils/helpers";
-import { createSession } from "../sessions/newSession.controller";
+import { createSession } from "../../services/session.service";
 
 export const verifyOTP = async (req: Request, res: Response) => {
   try {

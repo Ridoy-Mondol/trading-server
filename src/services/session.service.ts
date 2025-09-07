@@ -1,9 +1,9 @@
 import { Request } from "express";
 import { UAParser } from "ua-parser-js";
 import jwt from "jsonwebtoken";
-import prisma from "../../config/prisma-client";
-import { getClientIP } from "../../utils/ip";
-import { getLocationFromIP } from "../../utils/location";
+import prisma from "../config/prisma-client";
+import { getClientIP } from "../utils/ip";
+import { getLocationFromIP } from "../utils/location";
 
 interface UserSessionInput {
   userId: number;

@@ -5,6 +5,8 @@ import dotenv from 'dotenv';
 import routes from './routes';
 import cookieParser from "cookie-parser";
 
+import "./workers/notificationWorker"; 
+
 dotenv.config();
 
 const app = express();

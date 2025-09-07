@@ -3,6 +3,7 @@ import speakeasy from "speakeasy";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import prisma from "../../config/prisma-client";
+import { createNotification } from "../../services/notification.service";
 
 export const verify2FA = async (req: Request, res: Response) => {
   try {
@@ -83,6 +84,13 @@ export const verify2FA = async (req: Request, res: Response) => {
       data: { is2FAEnabled: true },
     });
     console.log("2FA enabled successfully");
+
+    await createNotification(
+      userId,
+      "SECURITY",
+      "Two-Factor Authentication Enabled",
+      "You have successfully enabled 2FA on your account."
+    );
 
     return res.json({ message: "2FA enabled successfully" });
   } catch (error) {

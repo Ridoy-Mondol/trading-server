@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import prisma from "../../../config/prisma-client";
-import { createSession } from "../../sessions/newSession.controller";
+import { createSession } from "../../../services/session.service";
+import { createNotification } from "../../../services/notification.service";
 
 export const resetForgotPassword = async (req: Request, res: Response) => {
   try {
@@ -101,6 +102,13 @@ export const resetForgotPassword = async (req: Request, res: Response) => {
     );
 
     await createSession(req, { userId: user.id, token });
+
+    await createNotification(
+      userId,
+      "SECURITY",
+      "Password changed",
+      "You have successfully reset your account password."
+    );
 
     res.cookie("auth_token", token, {
       httpOnly: true,
