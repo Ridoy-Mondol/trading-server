@@ -106,8 +106,8 @@ export const resetForgotPassword = async (req: Request, res: Response) => {
     await createNotification(
       userId,
       "SECURITY",
-      "Password changed",
-      "You have successfully reset your account password."
+      "Password Reset Completed",
+      "You have successfully reset your account password. If this was not you, reset your password immediately and contact support."
     );
 
     res.cookie("auth_token", token, {

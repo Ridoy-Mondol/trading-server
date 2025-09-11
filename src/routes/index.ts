@@ -7,6 +7,7 @@ import xprRoutes from "./xpr.routes";
 import sessionRoutes from "./session.route";
 import twoFARoutes from "./twoFA.routes";
 import passwordRoutes from "./password.routes";
+import notificationRoutes from "./notification.routes";
 
 const router = Router();
 
@@ -18,5 +19,6 @@ router.use("/xpr", xprRoutes);
 router.use("/sessions", sessionRoutes);
 router.use("/2fa", twoFARoutes);
 router.use("/password", passwordRoutes);
+router.use("/notification", notificationRoutes);
 
 export default router;

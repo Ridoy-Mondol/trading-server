@@ -55,7 +55,7 @@ export const verify2FA = async (req: Request, res: Response) => {
 
     const isPasswordValid = await bcrypt.compare(password, user.password);
     console.log("Password valid?", isPasswordValid);
-    
+
     if (!isPasswordValid) {
       console.log("Invalid password");
       return res.status(400).json({ message: "Invalid credentials" });
@@ -89,7 +89,7 @@ export const verify2FA = async (req: Request, res: Response) => {
       userId,
       "SECURITY",
       "Two-Factor Authentication Enabled",
-      "You have successfully enabled 2FA on your account."
+      "You have successfully enabled two-factor authentication on your account. This adds an extra layer of security to help keep your funds and data safe."
     );
 
     return res.json({ message: "2FA enabled successfully" });

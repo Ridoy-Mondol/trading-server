@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import prisma from "../../config/prisma-client";
+import { createNotification } from "../../services/notification.service";
 
 export const changePassword = async (req: Request, res: Response) => {
   try {
@@ -71,6 +72,13 @@ export const changePassword = async (req: Request, res: Response) => {
       where: { id: userId },
       data: { password: hashedPassword },
     });
+
+    await createNotification(
+      userId,
+      "SECURITY",
+      "Password Changed Successfully",
+      "Your account password has been updated successfully. If this was not you, reset your password immediately and contact support."
+    );
 
     return res.json({
       success: true,

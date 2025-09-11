@@ -3,6 +3,7 @@ import speakeasy from "speakeasy";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import prisma from "../../config/prisma-client";
+import { createNotification } from "../../services/notification.service";
 
 export const disable2FA = async (req: Request, res: Response) => {
   try {
@@ -82,6 +83,14 @@ export const disable2FA = async (req: Request, res: Response) => {
       where: { id: userId },
       data: { is2FAEnabled: false },
     });
+
+    await createNotification(
+      userId,
+      "SECURITY",
+      "Two-Factor Authentication Disabled",
+      "You have disabled 2FA on your account. We recommend keeping 2FA enabled to protect your funds and account access."
+    );
+
     console.log("2FA disabled successfully");
 
     return res.json({ message: "2FA disabled successfully" });
