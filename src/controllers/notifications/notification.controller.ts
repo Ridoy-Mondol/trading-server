@@ -29,14 +29,26 @@ export const getNotifications = async (req: Request, res: Response) => {
     const limit = Number(req.query.limit) || 10;
     const skip = (page - 1) * limit;
 
+    let filters: string[] | undefined = undefined;
+    if (req.query.filters) {
+      filters = (req.query.filters as string)
+        .split(",")
+        .map((f) => f.trim().toUpperCase());
+    }
+
+    const whereClause: any = { userId };
+    if (filters && filters.length > 0) {
+      whereClause.type = { in: filters };
+    }
+
     const [notifications, total] = await Promise.all([
       prisma.notification.findMany({
-        where: { userId },
+        where: whereClause,
         orderBy: { createdAt: "desc" },
         skip,
         take: limit,
       }),
-      prisma.notification.count({ where: { userId } }),
+      prisma.notification.count({ where: whereClause }),
     ]);
 
     return res.json({
