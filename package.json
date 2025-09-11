@@ -30,6 +30,7 @@
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^7.0.5",
     "prisma": "^6.13.0",
+    "pusher": "^5.2.0",
     "qrcode": "^1.5.4",
     "speakeasy": "^2.0.0",
     "supabase": "^2.33.9",

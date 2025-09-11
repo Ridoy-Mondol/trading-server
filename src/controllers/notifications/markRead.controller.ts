@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import prisma from "../../config/prisma-client";
 import jwt from "jsonwebtoken";
+import pusher from "../../config/pusher";
 
 export const markNotificationsRead = async (req: Request, res: Response) => {
   try {
@@ -28,6 +29,14 @@ export const markNotificationsRead = async (req: Request, res: Response) => {
       where: { userId, isRead: false },
       data: { isRead: true },
     });
+
+    if (updated.count > 0) {
+      await pusher.trigger(`notification-${userId}`, "update-notification", {
+        type: "bulk-mark-read",
+        userId,
+        isRead: true,
+      });
+    }
 
     return res.json({
       success: true,

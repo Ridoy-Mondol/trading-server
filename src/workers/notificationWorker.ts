@@ -1,6 +1,7 @@
 import { Worker } from "bullmq";
 import { connection } from "../config/redis";
 import prisma from "../config/prisma-client";
+import pusher from "../config/pusher";
 
 const worker = new Worker(
   "notifications",
@@ -10,13 +11,23 @@ const worker = new Worker(
     console.log(`🔄 Processing notification job ${job.id} for user ${userId}`);
 
     try {
-      await prisma.notification.create({
+      const newNotification = await prisma.notification.create({
         data: {
           userId,
           type,
           title,
           content,
         },
+      });
+
+      pusher.trigger(`notification-${userId}`, "new-notification", {
+        id: newNotification.id,
+        userId: newNotification.userId,
+        title: newNotification.title,
+        content: newNotification.content,
+        type: newNotification.type,
+        isRead: newNotification.isRead,
+        createdAt: newNotification.createdAt,
       });
 
       console.log(`✅ Notification created for user ${userId}: ${title}`);
