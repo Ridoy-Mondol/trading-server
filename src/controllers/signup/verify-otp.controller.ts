@@ -35,6 +35,7 @@ export const verifyOTP = async (req: Request, res: Response) => {
       phone,
       username,
       password,
+      role,
       otp: hashedOtp,
     } = pendingSignup;
 
@@ -61,6 +62,7 @@ export const verifyOTP = async (req: Request, res: Response) => {
         phone: phone || null,
         username,
         password: hashedPassword,
+        role,
         referralLink,
         referralPoints: 0,
         apiKey,
@@ -78,7 +80,7 @@ export const verifyOTP = async (req: Request, res: Response) => {
     res.clearCookie("signup_contact", { path: "/" });
 
     const token = jwt.sign(
-      { id: newUser.id, username: newUser.username },
+      { id: newUser.id, username: newUser.username, role: newUser.role },
       process.env.JWT_SECRET as string,
       { expiresIn: "15d" }
     );

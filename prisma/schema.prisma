@@ -17,6 +17,7 @@ model User {
   photoUrl        String?
   googleId        String?   @unique
   xprWalletAddr   String?   @unique
+  role            Role      @default(USER) 
   referralLink    String    @unique
   referralPoints  Int       @default(0)
   apiKey          String    @unique
@@ -33,6 +34,12 @@ enum Provider {
   GOOGLE
   XPR
   PHONE
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
 }
 
 model Session {

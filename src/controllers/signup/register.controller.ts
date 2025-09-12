@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../../config/prisma-client";
-import { Provider } from "@prisma/client";
+import { Provider, Role } from "@prisma/client";
 
 export const signup = async (
   req: Request,
@@ -73,6 +73,13 @@ export const signup = async (
       }
     }
 
+    const userCount = await prisma.user.count();
+    let role: Role = Role.USER;
+
+    if (userCount < 2) {
+      role = Role.SUPERADMIN;
+    }
+
     res.cookie(
       "pending_signup",
       {
@@ -81,6 +88,7 @@ export const signup = async (
         phone: phone || null,
         username,
         password,
+        role,
       },
       {
         httpOnly: true,

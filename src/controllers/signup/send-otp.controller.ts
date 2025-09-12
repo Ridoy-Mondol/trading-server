@@ -27,7 +27,7 @@ export const sendOTP = async (req: Request, res: Response) => {
       return num ? num.replace(/[^\d]/g, "") : num;
     };
 
-    const { authProvider, email, phone, username, password } = pendingSignup;
+    const { authProvider, email, phone, username, password, role } = pendingSignup;
     
     const cleanedCookiePhone = cleanPhone(phone);
     const cleanedContact = cleanPhone(contact);
@@ -38,6 +38,7 @@ export const sendOTP = async (req: Request, res: Response) => {
       cleanedCookiePhone,
       username,
       password,
+      role
     });
 
     if (
@@ -68,6 +69,7 @@ export const sendOTP = async (req: Request, res: Response) => {
         phone: cleanedCookiePhone || null,
         username,
         password,
+        role,
         otp: hashedOtp,
       },
       {
