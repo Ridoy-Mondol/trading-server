@@ -27,6 +27,7 @@ model User {
 
   sessions        Session[] @relation("userSessions")
   notifications   Notification[]
+  blogs           Blog[]
 }
 
 enum Provider {
@@ -80,5 +81,17 @@ enum NotificationType {
   API             // API key creation, deletion, permissions
   NEWS            // announcements, market updates, promotions
   OTHER           // fallback category
+}
+
+model Blog {
+  id          Int      @id @default(autoincrement())
+  title       String
+  content     String
+  category    String
+  image       String?
+  authorId    Int
+  createdAt   DateTime @default(now())
+
+  author      User     @relation(fields: [authorId], references: [id])
 }
 

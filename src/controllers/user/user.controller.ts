@@ -39,6 +39,7 @@ export const getUser = async (req: Request, res: Response) => {
         username: true,
         photoUrl: true,
         xprWalletAddr: true,
+        role: true,
         referralLink: true,
         referralPoints: true,
         apiKey: true,
