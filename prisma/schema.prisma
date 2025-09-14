@@ -80,6 +80,7 @@ enum NotificationType {
   REFERRAL        // referral bonuses, referral activity
   API             // API key creation, deletion, permissions
   NEWS            // announcements, market updates, promotions
+  CONTENT         // any user-published content (blogs, posts, videos, etc.)
   OTHER           // fallback category
 }
 
@@ -88,7 +89,7 @@ model Blog {
   title       String
   content     String
   category    String
-  image       String?
+  media       String 
   authorId    Int
   createdAt   DateTime @default(now())
 
