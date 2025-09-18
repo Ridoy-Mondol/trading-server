@@ -80,8 +80,8 @@ enum NotificationType {
   REFERRAL        // referral bonuses, referral activity
   API             // API key creation, deletion, permissions
   NEWS            // announcements, market updates, promotions
-  CONTENT         // any user-published content (blogs, posts, videos, etc.)
   OTHER           // fallback category
+  CONTENT         // any user-published content (blogs, posts, videos, etc.)
 }
 
 model Blog {

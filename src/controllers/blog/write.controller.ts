@@ -58,8 +58,7 @@ export const writeBlog = async (req: Request, res: Response) => {
 
     await createNotification(
       userId,
-      // "CONTENT",
-      NotificationType.NEWS,
+      NotificationType.CONTENT as any,
       "Your Blog Has Been Published!",
       notificationContent
     );
