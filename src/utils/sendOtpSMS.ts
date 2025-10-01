@@ -35,8 +35,8 @@ export const sendOtpSMS = async (
     console.log("✉️ Sending OTP SMS...");
     const messageBody =
       purpose === "signup"
-        ? `Welcome to XPRTrade! Your verification code is: ${otp}`
-        : `Reset your XPRTrade password using this code: ${otp}`;
+        ? `Welcome to XPRDex! Your verification code is: ${otp}`
+        : `Reset your XPRDex password using this code: ${otp}`;
     await client.messages.create({
       body: messageBody,
       from: twilioPhoneNumber,

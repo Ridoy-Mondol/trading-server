@@ -36,16 +36,16 @@ export const sendOtpEmail = async (
     console.log("➡️ Transporter created, preparing mail options...");
     const subject =
       purpose === "signup"
-        ? "Unlock Your XPRTrade Account - Verification Code"
-        : "Unlock Your XPRTrade Account - Password Reset Code";
+        ? "Unlock Your XPRDex Account - Verification Code"
+        : "Unlock Your XPRDex Account - Password Reset Code";
     const mailOptions = {
-      from: `"XPRTrade" <${process.env.SMTP_USER}>`,
+      from: `"XPRDex" <${process.env.SMTP_USER}>`,
       to: email,
       subject,
       html: `
         <div style="font-family: 'Helvetica Neue', Arial, sans-serif; background: #f9f9fb; padding: 20px; color: #333; text-align: center; max-width: 600px; margin: 0 auto; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); display: block; min-height: 0;">
           <h1 style="color: #2a5298; font-size: 32px; margin: 10px 0; text-transform: uppercase; letter-spacing: 2px; font-weight: 700;">
-            XPRTrade Verification
+            XPRDex Verification
           </h1>
           <p style="font-size: 18px; color: #666; margin: 15px 0; line-height: 1.6;">
             Your exclusive <strong>verification code</strong> is here to ${
@@ -59,7 +59,7 @@ export const sendOtpEmail = async (
             This code is valid for <strong>15 minutes</strong>. Please don’t share it with anyone. If this wasn’t you, ignore this email.
           </p>
           <div style="background: #f1f5f9; padding: 10px; border-radius: 10px; margin: 15px 0; border: 1px solid #e0e7ff;">
-            <p style="font-size: 14px; color: #555;">Powered by <strong style="color: #2a5298;">XPRTrade</strong> | © 2025 All rights reserved</p>
+            <p style="font-size: 14px; color: #555;">Powered by <strong style="color: #2a5298;">XPRDex</strong> | © 2025 All rights reserved</p>
           </div>
         </div>
         <style type="text/css">

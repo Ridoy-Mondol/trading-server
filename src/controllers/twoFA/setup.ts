@@ -48,15 +48,15 @@ export const setup2FA = async (req: Request, res: Response) => {
     const secret = user.twoFASecret;
 
     if (secret) {
-      const otpauthUrl = `otpauth://totp/XPRTrade:${
+      const otpauthUrl = `otpauth://totp/XPRDex:${
         decoded.username || decoded.id
-      }?secret=${secret}&issuer=XPRTrade`;
+      }?secret=${secret}&issuer=XPRDex`;
       const qrCode = await QRCode.toDataURL(otpauthUrl);
       return res.json({ qrCode });
     }
 
     const newSecret = speakeasy.generateSecret({
-      name: `XPRTrade (${decoded.username || decoded.id})`,
+      name: `XPRDex (${decoded.username || decoded.id})`,
     });
 
     await prisma.user.update({
